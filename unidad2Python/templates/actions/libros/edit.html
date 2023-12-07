@@ -1,59 +1,42 @@
-<!-- editar.html -->
-{% extends "formulario.html" %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actualizar Libro</title>
+</head>
+<body>
+    <div id="editForm" style="display: none;">
+        <form method="POST" action="{{ url_for('edit', id=data.id) }}">
+            <label for="nombre">Nombre:</label>
+            <input type="text" name="nombre" id="nombre" required>
+            
+            <label for="imagen">Imagen:</label>
+            <input type="text" name="imagen" id="imagen" required>
+        
+            <label for="url">URL:</label>
+            <input type="text" name="url" id="url" required>
+        
+            <button type="submit">Actualizar Libro</button>
+        </form>
+    </div>    
 
-{% block heading %}Editar Elemento{% endblock %}
-
-{% block form_action %}/editar/{id_elemento}{% endblock %}
-
-{% block form_fields %}
-<form method="POST" onsubmit="edit('{{ data[0] }}'); return false;">
-    <!-- Campos específicos para editar -->
-    <input type="hidden" id="id" name="id" value="{{ data[0] }}">
-
-    <!-- Otros campos... -->
-    <label for="nombre">Nombre:</label>
-    <input type="text" id="nombre" name="nombre" value="{{ data[1] }}" required>
+    <script>
+        function edit(id) {
+            fetch(`/edit/${id}`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('nombre').value = data.nombre;
+                document.getElementById('imagen').value = data.imagen;
+                document.getElementById('url').value = data.url;
     
-    <label for="imagen">Imagen:</label>
-    <input type="text" id="imagen" name="imagen" value="{{ data[2] }}" required>
-    
-    <label for="url">URL:</label>
-    <input type="text" id="url" name="url" value="{{ data[3] }}" required>
-
-
-    <button type="submit">Actualizar Libro</button>
-    <button id="brl" type="button" onclick="regresarLibro()">Cancelar</button>
-</form>
-
-
-<script>
-    function edit(id) {
-        var nombre = document.getElementById('nombre').value;
-        var imagen = document.getElementById('imagen').value;
-        var url = document.getElementById('url').value;
-
-        var data = {
-            nombre: nombre,
-            imagen: imagen,
-            url: url
-        };
-
-        fetch('/edit/' + id, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            window.location.href = '/libros';  // Redirige a la página de libros después de la actualización
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    }
-</script>
-    <!-- Otros campos... -->
-{% endblock %}
+                // Abre el formulario de edición
+                document.getElementById('editForm').style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>

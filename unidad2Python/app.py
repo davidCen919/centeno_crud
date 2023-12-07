@@ -1,5 +1,8 @@
 from flask import Flask, jsonify, render_template, request, redirect, url_for
 from flask import render_template
+from flask import abort
+
+from pymysql.cursors import DictCursor
 #importar la plantilla index.html
 from flaskext.mysql import MySQL
 #para crear nuestra aplicación
@@ -25,8 +28,8 @@ def inicio():
 @app.route('/libros')
 def libros():
        conexion=mysql.connect() #creamos la conexión con la base de datos
-       cursor= conexion.cursor()
-       cursor.execute("SELECT * FROM `libros`")
+       cursor= conexion.cursor(DictCursor)
+       cursor.execute("SELECT id, nombre, imagen, url FROM libros")
        libros=cursor.fetchall()
        conexion.commit()
        return render_template('sitio/libros.html',libros=libros)
@@ -60,27 +63,31 @@ def addlibros():
     return render_template('actions/libros/add.html')
 
 #edit libro
-@app.route('/edit/<int:id>', methods=['GET', 'PUT'])
+@app.route('/edit/<int:id>', methods=['GET', 'POST'])
 def edit(id):
-    cursor = mysql.get_db().cursor()
-    if request.method == 'GET':
+    try:
+        cursor = mysql.get_db().cursor()
         cursor.execute('SELECT * FROM libros WHERE id=%s', (id,))
         data = cursor.fetchone()
-        return render_template('edit.html', data=data)
 
-    elif request.method == 'PUT':
-        try:
-            data = request.get_json()
-            nombre = data['nombre']
-            imagen = data['imagen']
-            url = data['url']
+        if data is None:
+            # Handle the case where no data is found for the given ID
+            return render_template('error.html', message='Libro no encontrado')
 
-            cursor.execute('UPDATE libros SET nombre=%s, imagen=%s, url=%s WHERE id=%s',
-                           (nombre, imagen, url, id))
+        if request.method == 'POST':
+            nombre = request.form['nombre']
+            imagen = request.form['imagen']
+            url = request.form['url']
+            
+            cursor.execute('UPDATE libros SET nombre=%s, imagen=%s, url=%s WHERE id=%s', (nombre, imagen, url, id))
             mysql.get_db().commit()
-            return jsonify({'message': 'Libro actualizado exitosamente'})
-        except Exception as e:
-            return jsonify({'error': str(e)}), 500
+            return redirect(url_for('libros'))
+
+        return render_template('edit.html', data=data)
+    except Exception as e:
+        print(f"Error en edit_libro: {e}")
+        abort(500, description=str(e))
+
 
 #eliminar libro
 @app.route('/delete/<int:id>')

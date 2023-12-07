@@ -47,9 +47,9 @@
     <h1>Lista de Libros</h1>
     <ul>
         {% for libro in libros %}
-            <li> {{ libro[1] }}
-            <br> {{ libro[2] }} 
-            <br> <img src="{{ libro[3] }}" width="150" height="150"></li>
+            <li> {{ libro['nombre'] }}
+            <br> {{ libro['imagen'] }} 
+            <br> <img src="{{ libro['url'] }}" width="150" height="150"></li>
             <a href="{{url_for('edit', id=libro['id'])}}">
               <button>Editar</button>
           </a>
