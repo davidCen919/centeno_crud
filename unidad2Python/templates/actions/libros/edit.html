@@ -1,0 +1,59 @@
+<!-- editar.html -->
+{% extends "formulario.html" %}
+
+{% block heading %}Editar Elemento{% endblock %}
+
+{% block form_action %}/editar/{id_elemento}{% endblock %}
+
+{% block form_fields %}
+<form method="POST" onsubmit="edit('{{ data[0] }}'); return false;">
+    <!-- Campos específicos para editar -->
+    <input type="hidden" id="id" name="id" value="{{ data[0] }}">
+
+    <!-- Otros campos... -->
+    <label for="nombre">Nombre:</label>
+    <input type="text" id="nombre" name="nombre" value="{{ data[1] }}" required>
+    
+    <label for="imagen">Imagen:</label>
+    <input type="text" id="imagen" name="imagen" value="{{ data[2] }}" required>
+    
+    <label for="url">URL:</label>
+    <input type="text" id="url" name="url" value="{{ data[3] }}" required>
+
+
+    <button type="submit">Actualizar Libro</button>
+    <button id="brl" type="button" onclick="regresarLibro()">Cancelar</button>
+</form>
+
+
+<script>
+    function edit(id) {
+        var nombre = document.getElementById('nombre').value;
+        var imagen = document.getElementById('imagen').value;
+        var url = document.getElementById('url').value;
+
+        var data = {
+            nombre: nombre,
+            imagen: imagen,
+            url: url
+        };
+
+        fetch('/edit/' + id, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            window.location.href = '/libros';  // Redirige a la página de libros después de la actualización
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+</script>
+    <!-- Otros campos... -->
+{% endblock %}
