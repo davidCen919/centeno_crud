@@ -1,0 +1,161 @@
+@import url('https://fonts.googleapis.com/css2?family=Hedvig+Letters+Sans&family=Hedvig+Letters+Serif:opsz@12..24&family=Poppins&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Hedvig+Letters+Sans&family=Hedvig+Letters+Serif:opsz@12..24&family=Poppins&family=Raleway&display=swap');
+
+body{
+    font-family: 'Hedvig Letters Sans', sans-serif;
+}
+
+#menu{
+    background-color: #333;
+    display: flex;
+    justify-content: space-between;
+    height: 100px;
+}
+
+.navbar-brand{
+    font-size: 36px;
+    color: #fff;
+    margin-left: 25px;
+}
+
+.navbar-brand:hover{
+    color: white;
+}
+
+.nav-link{
+    color: rgb(253, 248, 248);
+    font-size: 25px;
+    padding: 10px 10px;
+    margin: 5px 5px;
+}
+
+.nav-link:hover{
+    background-color: #9b9797d8;
+    color: white;
+    border-radius: 13px;
+}
+
+.nav-item{
+    display: flex;
+    justify-content: space-between;
+    margin-left: 20px;
+    padding-left: 20px;
+}
+
+.navbar-nav{
+    padding-left: 400px;
+    display: flex;
+}
+
+.Titulo{
+    margin-top: 20px;
+    font-family: 'Raleway', sans-serif;
+    font-weight: bold;
+    text-align: center;
+}
+
+.Subtitulos{
+    font-weight: bold;
+    font-family: 'Raleway', sans-serif;
+    font-size: 33px;
+    padding-left: 75px;
+}
+
+/*css de los Botones*/
+
+.boton{
+    border: none;
+    border-radius: 10px;
+    background-color: rgb(77, 77, 236);
+    margin-top: 10px;
+    margin-left: 25px;
+    height: 35px;
+    color: #fff;
+    font-family: 'Hedvig Letters Serif', serif;
+    font-size: 18px;
+    
+}
+
+.editar{
+    border: none;
+    border-radius: 10px;
+    margin-top: 10px;
+    margin-right: 10px;
+    background-color: rgb(20, 202, 20);
+    color: #fff;
+    height: 30px;
+    font-family: 'Hedvig Letters Serif', serif;
+    font-size: 17px;
+}
+
+.eliminar{
+    border: none;
+    border-radius: 10px;
+    margin-top: 10px;
+    background-color: rgb(236, 16, 16);
+    height: 30px;
+    color: #fff;
+    font-family: 'Hedvig Letters Serif', serif;
+    font-size: 17px;
+}
+
+/*imagen*/
+.imagenes{
+    border-radius: 15px;
+}
+
+.carta{
+    font-family: 'Hedvig Letters Serif', serif;
+    font-weight: bold; 
+}
+
+/*parte de los libros*/
+.tarjeta {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-left: 30px;
+    margin-right: 30px;
+    padding: 4px 4px;
+}
+
+.cartas {
+    text-align: center;
+    margin: 8px 8px;
+    padding: 7px 7px;
+    width: 250px; /* Ajusta el ancho según tus necesidades */
+    background-color: #FFD699;
+    border-radius: 15px;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 12px;
+}
+
+.title{
+    margin-top: 6px;
+    font-size: 19px;
+}
+
+.subtitle{
+    margin-top: 6px;
+    font-size: 16px;
+    
+}
+
+.url{
+    margin-top: 15px;
+    font-size: 17px;
+    background-color: #9b59b6;
+    border: none;
+    border-radius: 10px;
+    padding: 8px 8px;
+
+}
+
+.ola{
+    text-align: center;
+}

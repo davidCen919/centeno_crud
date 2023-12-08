@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <title>Menú Bootstrap</title>
+  <!-- Enlace al archivo CSS de Bootstrap -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg" id="menu">
+  <a class="navbar-brand" href="#">Mi Sitio</a>
+  <button class="navbar-toggler boton" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="/">Inicio <span class="sr-only">(actual)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/libros">Libros</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/articulos">Articulos</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/peliculas">Peliculas</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/juegos">Juegos</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<h1 class="Titulo">Nuestros Productos</h1>
+
+<h2 class="Subtitulos">Libros</h2>
+<ul class="tarjeta">
+  {% for libro in libros %}
+      <li class="cartas">
+          <strong class="title">{{ libro[1] }}</strong><br>{# El índice 1 corresponde a la columna "nombre" #}
+          <strong class="subtitle">{{libro[2]}}</strong><br>
+          <img src="{{ libro[3] }}" width="150" height="150" class="imagenes"><br>  {# El índice 2 corresponde a la columna "imagen" #}
+          <a href="{{ libro[3] }}"><button class="url">Ver más</button></a>  {# El índice 3 corresponde a la columna "url" #}
+      </li>
+  {% endfor %}
+</ul>
+<h3 class="Subtitulos">Articulos</h3>
+<ul class="tarjeta">
+  {% for articulo in articulos %}
+  <li>
+      <strong class="title">{{ articulo[1] }}</strong><br>
+      <strong class="subtitle">{{articulo[2]}}</strong><br>
+      <img src="{{ articulo[2] }}" width="150" height="150" class="imagenes"><br>
+      <a href="{{ articulo[3] }}" target="_blank">Ver más</a>
+  </li>
+{% endfor %}
+</ul>
+<h4 class="Subtitulos">Peliculas</h4>
+<ul class="tarjeta">
+  {% for pelicula in peliculas %}
+  <li>
+      <strong class="title">{{ pelicula[1] }}</strong><br>
+      <strong class="subtitle">{{pelicula[2]}}</strong><br>
+      <img src="{{ pelicula[3] }}" width="150" height="150" class="imagenes"><br>
+      <a href="{{ pelicula[3] }}" target="_blank">Ver más</a>
+  </li>
+{% endfor %}
+</ul>
+<h5 class="Subtitulos">Juegos</h5>
+<ul class="tarjeta">
+  {% for juego in juegos %}
+            <li>
+                <strong class="title">{{ juego[1] }}</strong><br>
+                <strong class="subtitle">{{juego[2]}}</strong><br>
+                <img src="{{ juego[3] }}" width="150" height="150" class="imagenes"><br>
+                <a href="{{ juego[3] }}" target="_blank">Ver más</a>
+            </li>
+        {% endfor %}
+</ul>
+
+
+<!-- Enlace al archivo JavaScript de Bootstrap (jQuery y Popper.js son necesarios) -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+</body>
+</html>

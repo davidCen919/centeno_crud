@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Libro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+        #brl{
+            background-color: rgb(189, 42, 42);
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+       <h1>Agregar pelicula</h1>
+
+    <form method="POST" action="{{ url_for('addpeliculas') }}">
+        <label for="nombre">Nombre:</label>
+        <input placeholder="Ingresa el nombre de la pelicula" type="text" name="nombre" required>
+        
+        <label for="descripcion">Descripción:</label>
+        <input placeholder="Ingresa una descripcion" type="text" name="descripcion" required>
+
+        <label for="url">URL:</label>
+        <input placeholder="Ingresa la url de la imagen" type="text" name="url" required>
+
+        <button type="submit">Agregar Pelicula</button>
+        <button id="brl" type="submit" onclick="regresarLibro()">Cancelar</button>
+    </form>
+
+    <script>
+    function regresarLibro(){
+            document.getElementById('brl')
+            window.location.href='/peliculas';
+
+        }
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Libros</title>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS v5.2.1 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+       <nav class="navbar navbar-expand-lg" id="menu">
+              <a class="navbar-brand" href="#">Mi Sitio</a>
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                  <li class="nav-item active">
+                    <a class="nav-link" href="/">Inicio <span class="sr-only"></span></a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/libros">Libros</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/articulos">Articulos</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/peliculas">Peliculas</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/juegos">Juegos</a>
+                  </li>
+                </ul>
+              </div>
+            </nav>
+  <header>
+    <a href="/addarticulos">
+      <button class="boton">Agregar Articulo</button>
+    </a>
+    <header>
+      
+      <h1 class="ola">Lista de Articulos</h1>
+      <ul class="tarjeta">
+          {% for articulo in articulos %}
+              <li class="cartas"> {{ articulo['nombre'] }} 
+              <br> {{ articulo['descripcion'] }} 
+              <br> <img src="{{ articulo['url'] }}" width="150" height="150" class="imagen"><br>
+              <a href="/edit/">
+                <button class="editar">Editar</button>
+            </a>
+          <a href="{{url_for('deleteArticulo', id=articulo['id_articulo'])}}">
+                <button class="eliminar">Eliminar</button>
+            </a>
+          {% endfor %}
+      </ul>
+    </header>
+
+  </main>
+  <footer>
+    <!-- place footer here -->
+  </footer>
+  <!-- Bootstrap JavaScript Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+    integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.min.js"
+    integrity="sha384-7VPbUDkoPSGFnVtYi0QogXtr74QeVeeIs99Qfg5YCF+TidwNdjvaKZX19NZ/e6oz" crossorigin="anonymous">
+  </script>
+</body>
+
+</html>
