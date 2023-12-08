@@ -46,7 +46,7 @@
           <li class="cartas"> {{ juego['nombre'] }} 
           <br> {{ juego['descripcion'] }} 
           <br> <img src="{{ juego['url'] }}" width="150" height="150" class="imagen"><br>
-          <a href="/edit/">
+          <a href="{{url_for('editjuegos', id=juego['id_juego'])}}">
             <button class="editar">Editar</button>
         </a>
       <a href="{{url_for('deleteJuego', id=juego['id_juego'])}}">

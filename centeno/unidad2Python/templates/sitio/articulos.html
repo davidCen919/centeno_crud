@@ -51,7 +51,7 @@
               <li class="cartas"> {{ articulo['nombre'] }} 
               <br> {{ articulo['descripcion'] }} 
               <br> <img src="{{ articulo['url'] }}" width="150" height="150" class="imagen"><br>
-              <a href="/edit/">
+              <a href="{{url_for('editarticulos', id=articulo['id_articulo'])}}">
                 <button class="editar">Editar</button>
             </a>
           <a href="{{url_for('deleteArticulo', id=articulo['id_articulo'])}}">

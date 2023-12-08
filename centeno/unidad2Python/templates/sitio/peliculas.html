@@ -49,7 +49,7 @@
                     <li class="cartas"> {{ pelicula['nombre'] }} 
                     <br> {{ pelicula['descripcion'] }} 
                     <br> <img src="{{ pelicula['url'] }}"  width="150" height="150" class="imagen"><br>
-                    <a href="/edit/">
+                    <a href="{{url_for('editpeliculas', id=pelicula['id_pelicula'])}}">
                       <button class="editar">Editar</button>
                   </a>
                 <a href="{{url_for('deletePelicula', id=pelicula['id_pelicula'])}}">

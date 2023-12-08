@@ -23,24 +23,33 @@ conn_db(app)
 
 @app.route('/')
 def inicio():
-    # Conecta a la base de datos
-    conexion=mysql.connect()
-    # Realiza consultas para obtener productos de diferentes categorías
-    cursor = conexion.cursor()
-    cursor.execute("SELECT id,nombre, imagen, url FROM libros")
-    libros = cursor.fetchall()
-    # Realiza la consulta para obtener todos los juegos
-    cursor.execute("SELECT id_juego, nombre, descripcion, url FROM juegos")
-    juegos = cursor.fetchall()
-    # Realiza la consulta para obtener todas las películas
-    cursor.execute("SELECT id_pelicula, nombre, descripcion, url FROM peliculas")
-    peliculas = cursor.fetchall()
-    # Realiza la consulta para obtener todos los artículos
-    cursor.execute("SELECT id_articulo, nombre, descripcion, url FROM articulos")
-    articulos = cursor.fetchall()
+    try:
+        cursor = mysql.get_db().cursor()
 
-    conexion.close()
-    return render_template('sitio/index.html', libros=libros)
+        # Consulta SQL para obtener registros de todas las tablas
+        cursor.execute('SELECT id, nombre, imagen, url, "libros" as tipo FROM libros '
+                       'UNION ALL '
+                       'SELECT id_articulo, nombre, descripcion, url, "articulos" as tipo FROM articulos '
+                       'UNION ALL '
+                       'SELECT id_pelicula, nombre, descripcion, url, "peliculas" as tipo FROM peliculas '
+                       'UNION ALL '
+                       'SELECT id_juego, nombre, descripcion, url, "juegos" as tipo FROM juegos')
+
+        registros = cursor.fetchall()
+
+        # Filtra los registros según la tabla a la que pertenecen
+        libros = [registro for registro in registros if registro[4] == 'libros']
+        articulos = [registro for registro in registros if registro[4] == 'articulos']
+        peliculas = [registro for registro in registros if registro[4] == 'peliculas']
+        juegos = [registro for registro in registros if registro[4] == 'juegos']
+
+        return render_template('sitio/index.html', libros=libros, articulos=articulos, peliculas=peliculas, juegos=juegos)
+    except Exception as e:
+        print(f"Error en index: {e}")
+        abort(500, description=str(e))
+        # Maneja la excepción de manera adecuada según tus necesidades
+    return render_template('error.html', message='Error en la aplicación')
+
 #CREAR RUTAS
 @app.route('/libros')
 def libros():
@@ -145,6 +154,25 @@ def addpeliculas():
             return jsonify({'error': str(e)}), 500
     return render_template('actions/peliculas/add_peliculas.html')
 
+#edit pelicula
+@app.route('/editarpeliculas/<int:id>', methods=['GET', 'POST'])
+def editpeliculas(id):
+    cursor = mysql.get_db().cursor()
+    cursor.execute('SELECT * FROM peliculas WHERE id_pelicula=%s', (id,))
+    pelicula = cursor.fetchone()
+
+    if request.method == 'POST':
+            nombre = request.form['nombre']
+            descripcion = request.form['descripcion']
+            url = request.form['url']
+            
+            cursor.execute('UPDATE peliculas SET nombre=%s, descripcion=%s, url=%s WHERE id_pelicula=%s', (nombre, descripcion, url, id))
+            mysql.get_db().commit()
+            return redirect(url_for('libros'))
+    columnas = [desc[0] for desc in cursor.description]
+    pelicula = dict(zip(columnas,pelicula))
+    return render_template('actions/peliculas/edit_peliculas.html', pelicula=pelicula)
+
 #eliminar pelicula
 @app.route('/deletePelicula/<int:id>')
 def deletePelicula(id):
@@ -174,6 +202,25 @@ def addarticulos():
             print(f"Error en addarticulos: {e}")
             return jsonify({'error': str(e)}), 500
     return render_template('actions/articulos/add_articulos.html')
+
+#edit articulo
+@app.route('/editarticulos/<int:id>', methods=['GET', 'POST'])
+def editarticulos(id):
+    cursor = mysql.get_db().cursor()
+    cursor.execute('SELECT * FROM articulos WHERE id_articulo=%s', (id,))
+    articulo = cursor.fetchone()
+
+    if request.method == 'POST':
+            nombre = request.form['nombre']
+            descripcion = request.form['descripcion']
+            url = request.form['url']
+            
+            cursor.execute('UPDATE articulos SET nombre=%s, descripcion=%s, url=%s WHERE id_articulo=%s', (nombre, descripcion, url, id))
+            mysql.get_db().commit()
+            return redirect(url_for('libros'))
+    columnas = [desc[0] for desc in cursor.description]
+    articulo = dict(zip(columnas,articulo))
+    return render_template('actions/articulos/edit_articulos.html', articulo=articulo)
 
 #eliminar articulos
 @app.route('/deleteArticulo/<int:id>')
@@ -205,23 +252,24 @@ def addjuegos():
             return jsonify({'error': str(e)}), 500
     return render_template('actions/juegos/add_juegos.html')
 
-#edit juegos
-@app.route('/editjuegos/<int:id>', methods=['GET', 'POST'])
-def editjuegos(id_juego):
+#edit pelicula
+@app.route('/editarjuegos/<int:id>', methods=['GET', 'POST'])
+def editjuegos(id):
     cursor = mysql.get_db().cursor()
-    cursor.execute('SELECT * FROM juegos WHERE id=%s', (id,))
-    libro = cursor.fetchone()
+    cursor.execute('SELECT * FROM juegos WHERE id_juego=%s', (id,))
+    juego = cursor.fetchone()
+
     if request.method == 'POST':
-        nombre = request.form['nombre']
-        imagen = request.form['imagen']
-        url = request.form['url']
-        # Agregar validación y procesamiento de datos aquí
-        cursor.execute('UPDATE juegos SET nombre=%s, imagen=%s, url=%s WHERE id=%s', (nombre, imagen, url, id_juego))
-        mysql.get_db().commit()
-        return redirect(url_for('juegos'))
+            nombre = request.form['nombre']
+            descripcion = request.form['descripcion']
+            url = request.form['url']
+            
+            cursor.execute('UPDATE juegos SET nombre=%s, descripcion=%s, url=%s WHERE id_juego=%s', (nombre, descripcion, url, id))
+            mysql.get_db().commit()
+            return redirect(url_for('libros'))
     columnas = [desc[0] for desc in cursor.description]
-    libro = dict(zip(columnas, libro))
-    return render_template('actions/juegos/edit.html', libro=libro)
+    juego = dict(zip(columnas,juego))
+    return render_template('actions/juegos/edit_juegos.html', juego=juego)
 
 #eliminar articulos
 @app.route('/deleteJuego/<int:id>')

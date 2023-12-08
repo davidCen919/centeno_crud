@@ -12,10 +12,30 @@ conn_db(app)
 
 @app.route('/')
 def index():
-       cursor = mysql.get_db().cursor()
-       cursor.execute('SELECT * FROM libros')
-       libros = cursor.fetchall()
-       return render_template('sitio/libros.html',libros=libros)
+    try:
+        cursor = mysql.get_db().cursor()
+
+        # Consulta SQL para obtener registros de todas las tablas
+        cursor.execute('SELECT id, nombre, imagen, url, "libros" as tipo FROM libros '
+                       'UNION ALL '
+                       'SELECT id_articulos, nombre, descripcion, url, "articulos" as tipo FROM articulos '
+                       'UNION ALL '
+                       'SELECT id_pelicula, nombre, descripcion, url, "peliculas" as tipo FROM peliculas '
+                       'UNION ALL '
+                       'SELECT id_juego, nombre, descripcio, url, "juegos" as tipo FROM juegos')
+
+        registros = cursor.fetchall()
+
+        # Filtra los registros según la tabla a la que pertenecen
+        libros = [registro for registro in registros if registro[4] == 'libros']
+        articulos = [registro for registro in registros if registro[4] == 'articulos']
+        peliculas = [registro for registro in registros if registro[4] == 'peliculas']
+        juegos = [registro for registro in registros if registro[4] == 'juegos']
+
+        return render_template('sitio/index.html', libros=libros, articulos=articulos, peliculas=peliculas, juegos=juegos)
+    except Exception as e:
+        print(f"Error en index: {e}")
+        abort(500, description=str(e))
 
 
 @app.route('/addlibross', methods=['GET', 'POST'])

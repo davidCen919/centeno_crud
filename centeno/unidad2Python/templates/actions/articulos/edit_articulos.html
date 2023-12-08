@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Actualizar Libro</title>
+    <title>Actualizar Articulo</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -51,28 +51,28 @@
 </head>
 <body>
     <div id="editForm" >
-        <form method="POST" action="{{ url_for('editlibros', id=libro.id) }}">
+        <form method="POST" action="{{ url_for('editarticulos', id=articulo.id_articulo) }}">
             <label for="nombre">Nombre:</label>
-            <input type="text" name="nombre" id="nombre" value="{{ libro.nombre }}" required>
+            <input type="text" name="nombre" id="nombre" value="{{ articulo.nombre }}" required>
             
-            <label for="imagen">Imagen:</label>
-            <input type="text" name="imagen" id="imagen" value="{{ libro.imagen }}" required>
+            <label for="imagen">Descripcion:</label>
+            <input type="text" name="descripcion" id="descripcion" value="{{ articulo.descripcion }}" required>
         
             <label for="url">URL:</label>
-            <input type="text" name="url" id="url" value="{{ libro.url }}" required>
+            <input type="text" name="url" id="url" value="{{ articulo.url }}" required>
         
-            <button type="submit">Actualizar Libro</button>
+            <button type="submit">Actualizar Articulo</button>
             <button id="brl" type="submit" onclick="regresarLibro()">Cancelar</button>
         </form>
     </div>    
 
     <script>
-        function editlibros(id) {
-            fetch(`/editlibros/${id}`)
+        function editarticulos(id) {
+            fetch(`/editarticulos/${id}`)
             .then(response => response.json())
             .then(data => {
                 document.getElementById('nombre').value = data.nombre;
-                document.getElementById('imagen').value = data.imagen;
+                document.getElementById('descripcion').value = data.descripcion;
                 document.getElementById('url').value = data.url;
     
                 // Abre el formulario de edición
@@ -85,7 +85,7 @@
 
         function regresarLibro(){
             document.getElementById('brl')
-            window.location.href='/libros';
+            window.location.href='/articulos';
 
         }
     </script>
