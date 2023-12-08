@@ -29,37 +29,23 @@ def add():
         return redirect(url_for('index'))
     return render_template('../actions/libros/add.html')
 
-@app.route('/edit/<int:id>', methods=['GET', 'POST'])
+@app.route('/editlibros/<int:id>', methods=['GET', 'POST'])
 def edit(id):
-    try:
-        cursor = mysql.get_db().cursor()
-        if request.method == 'POST':
-            # Procesa la solicitud de actualización del formulario
-            nombre = request.form['nombre']
-            imagen = request.form['imagen']
-            url = request.form['url']
-            
-            cursor.execute('UPDATE libros SET nombre=%s, imagen=%s, url=%s WHERE id=%s', (nombre, imagen, url, id))
-            mysql.get_db().commit()
-            return redirect(url_for('libros'))
-        else:
-            # Maneja la solicitud GET para obtener la información del libro
-            cursor.execute('SELECT * FROM libros WHERE id=%s', (id,))
-            data = cursor.fetchone()
+    cursor = mysql.get_db().cursor()
+    cursor.execute('SELECT * FROM libros WHERE id=%s', (id,))
+    libro = cursor.fetchone()
 
-            if data is None:
-                # Maneja el caso en el que no se encuentre información para el ID dado
-                return render_template('error.html', message='Libro no encontrado')
+    if request.method == 'POST':
+        # Procesa la solicitud de actualización del formulario
+        nombre = request.form['nombre']
+        imagen = request.form['imagen']
+        url = request.form['url']
+        # Agregar validación y procesamiento de datos aquí
+        cursor.execute('UPDATE libros SET nombre=%s, imagen=%s, url=%s WHERE id=%s', (nombre, imagen, url, id))
+        mysql.get_db().commit()
+        return redirect(url_for('libros'))
 
-            return jsonify({
-                'id': data[0],
-                'nombre': data[1],
-                'imagen': data[2],
-                'url': data[3]
-            })
-    except Exception as e:
-        print(f"Error en edit_libro: {e}")
-        abort(500, description=str(e))
+    return render_template('actions/libros/edit.html', libro=libro)
     
 @app.route('/delete/<int:id>')
 def delete(id):

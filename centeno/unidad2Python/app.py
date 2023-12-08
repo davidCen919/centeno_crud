@@ -13,9 +13,9 @@ mysql=MySQL()
 
 def conn_db(app):
        app.config['MYSQL_DATABASE_HOST']='localhost'
-       app.config['MYSQL_DATABASE_USER']='root'
-       app.config['MYSQL_DATABASE_PASSWORD']=''
-       app.config['MYSQL_DATABASE_DB']='sitio'
+       app.config['MYSQL_DATABASE_USER']='sqluser'
+       app.config['MYSQL_DATABASE_PASSWORD']='password'
+       app.config['MYSQL_DATABASE_DB']='sitio2'
        mysql.init_app(app)
 #nuevo código
 
@@ -95,18 +95,13 @@ def addlibros():
     return render_template('actions/libros/add.html')
 
 #edit libro
-@app.route('/edit/<int:id>', methods=['GET', 'POST'])
-def edit(id):
-    try:
-        cursor = mysql.get_db().cursor()
-        cursor.execute('SELECT * FROM libros WHERE id=%s', (id,))
-        data = cursor.fetchone()
+@app.route('/editlibros/<int:id>', methods=['GET', 'POST'])
+def editlibros(id):
+    cursor = mysql.get_db().cursor()
+    cursor.execute('SELECT * FROM libros WHERE id=%s', (id,))
+    libro = cursor.fetchone()
 
-        if data is None:
-            # Handle the case where no data is found for the given ID
-            return render_template('error.html', message='Libro no encontrado')
-
-        if request.method == 'POST':
+    if request.method == 'POST':
             nombre = request.form['nombre']
             imagen = request.form['imagen']
             url = request.form['url']
@@ -114,11 +109,9 @@ def edit(id):
             cursor.execute('UPDATE libros SET nombre=%s, imagen=%s, url=%s WHERE id=%s', (nombre, imagen, url, id))
             mysql.get_db().commit()
             return redirect(url_for('libros'))
-
-        return render_template('edit.html', data=data)
-    except Exception as e:
-        print(f"Error en edit_libro: {e}")
-        abort(500, description=str(e))
+    columnas = [desc[0] for desc in cursor.description]
+    libro = dict(zip(columnas,libro))
+    return render_template('actions/libros/edit.html', libro=libro)
 
 
 #eliminar libro
@@ -214,7 +207,7 @@ def addjuegos():
 
 #edit juegos
 @app.route('/editjuegos/<int:id>', methods=['GET', 'POST'])
-def editjuegos(id):
+def editjuegos(id_juego):
     cursor = mysql.get_db().cursor()
     cursor.execute('SELECT * FROM juegos WHERE id=%s', (id,))
     libro = cursor.fetchone()

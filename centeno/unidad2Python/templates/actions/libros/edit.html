@@ -7,23 +7,23 @@
 </head>
 <body>
     <div id="editForm" style="display: none;">
-        <form method="POST" action="{{ url_for('edit', id=data.id) }}">
+        <form method="POST" action="{{ url_for('editlibros', id=libro.id) }}">
             <label for="nombre">Nombre:</label>
-            <input type="text" name="nombre" id="nombre" required>
+            <input type="text" name="nombre" id="nombre" value="{{ libro.nombre }}" required>
             
             <label for="imagen">Imagen:</label>
-            <input type="text" name="imagen" id="imagen" required>
+            <input type="text" name="imagen" id="imagen" value="{{ libro.imagen }}" required>
         
             <label for="url">URL:</label>
-            <input type="text" name="url" id="url" required>
+            <input type="text" name="url" id="url" value="{{ libro.url }}" required>
         
             <button type="submit">Actualizar Libro</button>
         </form>
     </div>    
 
     <script>
-        function edit(id) {
-            fetch(`/edit/${id}`)
+        function editlibros(id) {
+            fetch(`/editlibros/${id}`)
             .then(response => response.json())
             .then(data => {
                 document.getElementById('nombre').value = data.nombre;
